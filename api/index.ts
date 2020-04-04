@@ -1,5 +1,13 @@
-import { NowRequest, NowResponse } from '@now/node'
+import { NowRequest, NowResponse } from "@now/node";
+import Data from "../dynamo/DTO/Data";
+import data from "../dynamo/model/data";
 
-export default (req: NowRequest, res: NowResponse) => {
-  res.json({ name: 'John', email: 'john@example.com' })
-}
+
+export default async (req: NowRequest, res: NowResponse) => {
+  const record = new Data();
+  record.value = "world";
+  record.key = "hello";
+  const dataModel =  await data.connect();
+  const save = await dataModel.put(record);
+  res.json({record: save });
+};
